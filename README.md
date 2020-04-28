@@ -21,7 +21,7 @@ To host the bot locally , you will need:
 * Python 3.6 
 * [discord.py](https://discordpy.readthedocs.io/en/latest/intro.html#prerequisites)
 * A Discord developer account / bot application for the TOKEN
-
+* Download the songs from [this](https://t.me/eduqard_surovy) telegram channel and put them into the res directory 
 ## Installing
 
 1. Clone the repository 

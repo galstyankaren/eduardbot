@@ -12,7 +12,7 @@ load_dotenv(os.path.join(PROJECT_FOLDER, '.env'))
 
 TOKEN = os.getenv("TOKEN")
 
-SRC_PATH = "./res/"
+SRC_PATH = "../res/"
 
 CHANNEL_LIST = ['Лужа', 'ТВ Х*Й', 'Х*Й ТВ', 'ТВ Б**ДЬ',
                 'ЦКТЗ ТВ', 'Russia Yesterday', 'НТВ Минус', 'Золотой дождь']
@@ -52,7 +52,6 @@ class Eduard(commands.Cog):
 
         # Remove the song from the list, so it's not gonna repeat again (unless the playlist is exhausted)
         del self.song_list[choice_index]
-
         await bot.change_presence(activity=discord.Game(name=song_name[0]))
         await ctx.send(f"<<{song_name[0]}>> на телеканале {random_channel}")
 
