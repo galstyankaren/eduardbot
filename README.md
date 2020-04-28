@@ -26,14 +26,12 @@ To host the bot locally , you will need:
 
 1. Clone the repository 
 ```git clone https://github.com/galstyankaren/eduardbot.git```
-2. ```## Init pipenv from inside the project```
-
-``` cd eduardbot && pipenv shell ```
+2. Init pipenv from inside the project
+```cd eduardbot && pipenv shell```
 3. Create a .env file in the project root and add your Discord bot token
 ```TOKEN=<YOUR_DISCORD_TOKEN>```
 4. Thats it! Now run the bot script 
 ```cd src && python main.py```
-
 
 # TODO list
 
