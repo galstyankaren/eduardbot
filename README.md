@@ -1,6 +1,10 @@
+
 # EduardBot
+
 Discord bot that plays random Эдуард Суровый songs. 
 The only thing that can make your jokes sound decent in comparison.
+
+![alt-text](https://raw.githubusercontent.com/galstyankaren/eduardbot/master/screenshot.png)
 
 # Usage
 
@@ -9,11 +13,9 @@ Connect to a voice channel.Write the command bellow to play a random song
 To stop the bot
 ```eduard.stop```
 
-# Installation 
-
-## Add to channel
-
 TODO: Add the discord bot link
+
+# Installation 
 
 ## Prerequisites
 To host the bot locally , you will need:
@@ -35,7 +37,7 @@ To host the bot locally , you will need:
 
 # TODO list
 
-* Add an option to play X ammount of random songs
+* Add an option to play X amount of random songs
 * Add a command to play Eduards intro riff
 * Spaghetti cleanup 
 * Dockerize the bot
