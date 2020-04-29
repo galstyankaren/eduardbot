@@ -12,7 +12,10 @@ load_dotenv(os.path.join(PROJECT_FOLDER, '.env'))
 
 TOKEN = os.getenv("TOKEN")
 
-SRC_PATH = "../res/"
+
+SRC_PATH = "./res/"
+
+SONG_LIST = os.listdir(SRC_PATH)
 
 CHANNEL_LIST = ['Лужа', 'ТВ Х*Й', 'Х*Й ТВ', 'ТВ Б**ДЬ',
                 'ЦКТЗ ТВ', 'Russia Yesterday', 'НТВ Минус', 'Золотой дождь']
@@ -25,41 +28,53 @@ ffmpeg_options = {
 
 
 class Eduard(commands.Cog):
-    song_list = []
+
+    queue = []
 
     def __init__(self, bot):
+        global SONG_LIST
         self.bot = bot
-        self.song_list = os.listdir(SRC_PATH)
+        self.queue = [i for i in SONG_LIST]
 
-    @commands.command()
-    async def sing(self, ctx):
-
-        count = len(self.song_list)
-
-        if count == 0:
-            # Reset the song list
-            self.song_list = os.listdir(SRC_PATH)
-
-        choice_index = random.choice(range(count))
-        choice = self.song_list[choice_index]
-
+    async def play_local(self,ctx,choice):
         source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"{SRC_PATH}{choice}"))
         ctx.voice_client.play(source, after=lambda e: print('Player error: %s' % e) if e else None)
-
         random_channel = random.choice(CHANNEL_LIST)
         # Filter out the name of the song from the flac files
         song_name = re.findall(FLAC_REGEX, choice, re.MULTILINE)
-
-        # Remove the song from the list, so it's not gonna repeat again (unless the playlist is exhausted)
-        del self.song_list[choice_index]
         await bot.change_presence(activity=discord.Game(name=song_name[0]))
         await ctx.send(f"<<{song_name[0]}>> на телеканале {random_channel}")
+
+    @commands.command()
+    async def play(self, ctx,*, query):
+        global SONG_LIST
+        count = len(self.queue)
+
+        if count == 0:
+            # Reset the song list
+            self.queue = [i for i in SONG_LIST]
+        try:
+            choice_index = int(query) if query else random.choice(range(count))
+            choice = SONG_LIST[choice_index] if query else self.queue[choice_index]
+        except ValueError:
+            print('Choice is not a number')
+
+        await self.play_local(ctx,choice)
+
+        # Remove the song from the list, so it's not gonna repeat again (unless the playlist is exhausted)
+        del self.queue[choice_index]
+
 
     @commands.command()
     async def stop(self, ctx):
         await ctx.voice_client.disconnect()
 
-    @sing.before_invoke
+
+    @commands.command()
+    async def list(self, ctx):
+        pass
+
+    @play.before_invoke
     async def ensure_voice(self, ctx):
         if ctx.voice_client is None:
             if ctx.author.voice:
@@ -86,8 +101,8 @@ async def on_ready():
 #     if message.author.id == bot.user.id:
 #         return
 #     if 'Эдуард' in message.content:
-#         random_command = bot.get_command("sing")
-#         await message.channel.invoke(random_command)
+#         play_command = bot.get_command("playy")
+#         await message.channel.invoke(play_command)
 
 
 bot.add_cog(Eduard(bot))
