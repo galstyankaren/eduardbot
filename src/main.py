@@ -1,6 +1,5 @@
 import random
 import re
-
 import discord
 from discord.ext import commands
 import os
@@ -9,22 +8,18 @@ from dotenv import load_dotenv
 PROJECT_FOLDER = os.getcwd()
 
 load_dotenv(os.path.join(PROJECT_FOLDER, '.env'))
+ffmpeg_options = {
+    'options': '-vn'
+}
 
 TOKEN = os.getenv("TOKEN")
-
-
 SRC_PATH = "./res/"
-
 SONG_LIST = os.listdir(SRC_PATH)
 
 CHANNEL_LIST = ['Лужа', 'ТВ Х*Й', 'Х*Й ТВ', 'ТВ Б**ДЬ',
                 'ЦКТЗ ТВ', 'Russia Yesterday', 'НТВ Минус', 'Золотой дождь']
-
 FLAC_REGEX = r".\s+([^()]+)\.flac$"
 
-ffmpeg_options = {
-    'options': '-vn'
-}
 
 
 class Eduard(commands.Cog):
@@ -46,10 +41,9 @@ class Eduard(commands.Cog):
         await ctx.send(f"<<{song_name[0]}>> на телеканале {random_channel}")
 
     @commands.command()
-    async def play(self, ctx,*, query):
+    async def play(self, ctx,*, query=None):
         global SONG_LIST
         count = len(self.queue)
-
         if count == 0:
             # Reset the song list
             self.queue = [i for i in SONG_LIST]
@@ -72,7 +66,10 @@ class Eduard(commands.Cog):
 
     @commands.command()
     async def list(self, ctx):
-        pass
+        global SONG_LIST
+        temp_list = [(i,song) for i,song in enumerate(SONG_LIST)]
+        await ctx.channel.send(f"{temp_list}")
+
 
     @play.before_invoke
     async def ensure_voice(self, ctx):
